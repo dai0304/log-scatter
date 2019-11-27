@@ -61,7 +61,7 @@ application {
 
 jib {
     to {
-        image = "dai0304/${project.name}:${project.version}"
+        image = "dai0304/${project.name}"
         auth {
           username = "dai0304"
           password = "$System.env.DOCKERHUB_PASS"
