@@ -2,17 +2,17 @@
 // Gradle configuration
 
 buildscript {
-	repositories {
-		jcenter()
-		mavenCentral()
-	}
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
 }
 
 plugins {
     id 'java'
     id 'application'
     id "org.springframework.boot" version "2.1.2.RELEASE"
-	id 'com.google.cloud.tools.jib' version '1.2.0'
+    id 'com.google.cloud.tools.jib' version '1.2.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -23,40 +23,50 @@ apply from: "${rootProject.projectDir}/gradle/version.gradle"
 
 repositories {
     jcenter()
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// spring
-	implementation "org.springframework.boot:spring-boot-starter"
-	implementation "org.springframework.boot:spring-boot-starter-web"
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    // spring
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
-	// others
+    // others
 
-	// lombok
-	implementation "org.projectlombok:lombok"
-	annotationProcessor "org.projectlombok:lombok"
-	testImplementation "org.projectlombok:lombok"
-	testAnnotationProcessor "org.projectlombok:lombok"
+    // lombok
+    implementation "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    testImplementation "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
 
-	// test
+    // test
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 // compiler
 tasks.withType(AbstractCompile) each {
-	it.options.encoding = "UTF-8"
+    it.options.encoding = "UTF-8"
 }
 
 compileJava {
-	options.compilerArgs << "-Werror"
-	options.compilerArgs << "-Xlint:all" << "-Xlint:-processing" << "-Xlint:-deprecation"
+    options.compilerArgs << "-Werror"
+    options.compilerArgs << "-Xlint:all" << "-Xlint:-processing" << "-Xlint:-deprecation"
 }
 
 application {
     mainClassName = 'jp.xet.logscatter.LogScatterApplication'
+}
+
+jib {
+    to {
+        image = "dai0304/${project.name}:${project.version}"
+        auth {
+          username = "dai0304"
+          password = "$System.env.DOCKERHUB_PASS"
+        }
+    }
 }
 
 // ================
